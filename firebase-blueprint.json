@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User specific goals and settings for customized meal planning.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The unique Firebase Auth identifier of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "preferences": {
+          "type": "object",
+          "description": "Meal and diet preferences (e.g., vegetarian, gluten-free, none)."
+        },
+        "healthGoals": {
+          "type": "object",
+          "description": "Nutritional goals (e.g. high protein, low carb, calories)."
+        },
+        "budgetLimit": {
+          "type": "number",
+          "description": "Monthly or weekly budget limit for groceries."
+        }
+      },
+      "required": ["userId", "email"]
+    },
+    "MealPlan": {
+      "title": "Meal Plan",
+      "description": "Generated breakfast, lunch, and dinner plans with context matching.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The unique Firebase Auth identifier of the owner."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this meal plan was auto-generated."
+        },
+        "date": {
+          "type": "string",
+          "description": "The day of the meal plan (e.g., May 20, Tue)."
+        },
+        "breakfast": {
+          "type": "object",
+          "description": "The generated breakfast item with title, calories, prepTime, ingredients, and steps."
+        },
+        "lunch": {
+          "type": "object",
+          "description": "The generated lunch item with title, calories, prepTime, ingredients, and steps."
+        },
+        "dinner": {
+          "type": "object",
+          "description": "The generated dinner item with title, calories, prepTime, ingredients, and steps."
+        },
+        "groceryList": {
+          "type": "array",
+          "description": "Array of grocery items with estimated costs."
+        },
+        "substitutions": {
+          "type": "array",
+          "description": "Smart swaps based on budget or availability."
+        },
+        "budgetFeasibility": {
+          "type": "object",
+          "description": "Breakdown of the meal plan's budget suitability."
+        }
+      },
+      "required": ["userId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Root document containing user-specific parameters."
+    },
+    "/users/{userId}/meal_plans/{planId}": {
+      "schema": "MealPlan",
+      "description": "Sub-collection of customized day-by-day meal plans."
+    }
+  }
+}

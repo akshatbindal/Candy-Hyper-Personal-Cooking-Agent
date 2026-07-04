@@ -1,0 +1,6 @@
+{
+  "name": "Candy: Your Hyper-Personal Cooking Agent",
+  "description": "A schedule-aware, hyper-personal meal planner that designs tailored breakfast, lunch, and dinner lists, checklists, and substitutions based on calendar schedules, emails, and active nutrition targets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if the user is signed in and is the owner of the resource
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Enforce basic validation and boundary checks on IDs to prevent injection/abuse
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Rules for connection test
+    match /test/{docId} {
+      allow read: if true;
+    }
+
+    // Rules for User profiles
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) && isValidId(userId);
+      
+      // Rules for Meal Plans subcollection
+      match /meal_plans/{planId} {
+        allow read, write: if isOwner(userId) && isValidId(userId) && isValidId(planId);
+      }
+    }
+  }
+}
