@@ -8,6 +8,7 @@ import {
   getUserPreferences,
   saveMealPlan,
   getMealPlansHistory,
+  initFirestoreConnectionCheck,
 } from "./lib/firebase";
 import {
   fetchCalendarEvents,
@@ -183,6 +184,7 @@ export default function App() {
         setUser(loggedInUser);
         setAccessToken(token);
         setNeedsAuth(false);
+        initFirestoreConnectionCheck();
         await loadUserData(loggedInUser.uid, token);
       },
       () => {
@@ -204,8 +206,9 @@ export default function App() {
         showTemporaryInfo(`Successfully signed in as ${result.user.displayName}! Syncing Workspace details...`);
         await loadUserData(result.user.uid, result.accessToken);
       }
-    } catch (err: any) {
-      setError("Sign-in failed. Please try again. Make sure to allow popup access.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Sign-in failed. Please try again.";
+      setError(message);
     } finally {
       setIsLoggingIn(false);
     }
@@ -293,9 +296,10 @@ export default function App() {
       const data: MealPlanData = await res.json();
       setMealPlan(data);
       showTemporaryInfo("Successfully generated personalized meal plan based on your calendar & fridge contents!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || "Something went wrong while compiling your meal plan. Please try again.");
+      const message = err instanceof Error ? err.message : "Something went wrong while compiling your meal plan.";
+      setError(message);
     } finally {
       setLoading(false);
     }

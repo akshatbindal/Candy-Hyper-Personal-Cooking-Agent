@@ -11,7 +11,7 @@ export const fetchCalendarEvents = async (accessToken: string): Promise<Calendar
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
 
     const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${startOfDay.toISOString()}&timeMax=${endOfDay.toISOString()}&singleEvents=true&orderBy=startTime`;
-    
+
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -43,7 +43,7 @@ export const fetchGmailSnippets = async (accessToken: string): Promise<GmailMess
     // Search query for meals, lunch, dinners, or meetings in subject or body
     const query = "subject:(dinner OR lunch OR food OR meeting OR restaurant OR reservation) OR meeting OR dinner";
     const url = `https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=5`;
-    
+
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -57,7 +57,7 @@ export const fetchGmailSnippets = async (accessToken: string): Promise<GmailMess
     if (!listData.messages || listData.messages.length === 0) return [];
 
     const snippets: GmailMessageSnippet[] = [];
-    
+
     // Fetch individual snippets in parallel to keep performance optimal
     await Promise.all(
       listData.messages.map(async (msg: { id: string }) => {

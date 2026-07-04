@@ -12,6 +12,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  getDocFromServer,
   collection,
   addDoc,
   getDocs,
@@ -38,7 +39,6 @@ const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID;
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app, firestoreDatabaseId);
-
 
 // Configure Google OAuth provider with requested scopes
 export const googleProvider = new GoogleAuthProvider();
@@ -217,14 +217,12 @@ export const getMealPlansHistory = async (userId: string, maxResults = 10): Prom
   }
 };
 
-// Validate Connection to Firestore (MANDATORY CONSTRAINT)
-import { getDocFromServer } from "firebase/firestore";
-async function testConnection() {
+// Validate Connection to Firestore (call lazily after app is ready)
+export async function initFirestoreConnectionCheck(): Promise<void> {
   try {
     await getDocFromServer(doc(db, "test", "connection"));
-  } catch (error: any) {
-    console.warn("Firestore connection check failed (the app can still work in offline/guest mode):", error?.message || error);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn("Firestore connection check failed (the app can still work in offline/guest mode):", message);
   }
 }
-testConnection();
-

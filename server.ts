@@ -21,7 +21,7 @@ const ai = apiKey
 
 async function startServer() {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({ limit: '100kb' }));
 
   // API: Get health status
   app.get("/api/health", (req, res) => {
@@ -38,6 +38,14 @@ async function startServer() {
 
     try {
       const { events = [], emails = [], preferences, customIngredients = "" } = req.body;
+
+      // Basic input validation
+      if (!Array.isArray(events) || !Array.isArray(emails)) {
+        return res.status(400).json({ error: "Invalid input: events and emails must be arrays." });
+      }
+      if (typeof customIngredients !== "string" || customIngredients.length > 2000) {
+        return res.status(400).json({ error: "Invalid input: customIngredients must be a string under 2000 characters." });
+      }
 
       // Map preferences to strings
       const prefs = preferences || {
@@ -182,9 +190,10 @@ INSTRUCTIONS FOR EXPERT MEAL DESIGN:
 
       const mealPlan = JSON.parse(responseText);
       res.json(mealPlan);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to generate meal plan";
       console.error("Gemini meal generation error:", error);
-      res.status(500).json({ error: error.message || "Failed to generate meal plan" });
+      res.status(500).json({ error: message });
     }
   });
 
@@ -203,7 +212,7 @@ INSTRUCTIONS FOR EXPERT MEAL DESIGN:
     });
   }
 
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
   });
