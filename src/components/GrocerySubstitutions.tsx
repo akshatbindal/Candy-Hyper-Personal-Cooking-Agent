@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { MealPlanData } from "../types";
-import { ShoppingBag, ArrowLeftRight, Check, Sparkles, CheckSquare, Bookmark, AlertCircle, ShoppingCart } from "lucide-react";
+import { ShoppingBag, ArrowLeftRight, Check, CheckSquare, Bookmark, AlertCircle, ShoppingCart } from "lucide-react";
 
 interface GrocerySubstitutionsProps {
   plan: MealPlanData;

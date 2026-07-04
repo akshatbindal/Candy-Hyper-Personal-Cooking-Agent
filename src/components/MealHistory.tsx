@@ -1,6 +1,5 @@
-import React from "react";
 import { MealPlanData } from "../types";
-import { History, Calendar, ExternalLink, Trash2 } from "lucide-react";
+import { History, Calendar, ExternalLink } from "lucide-react";
 
 interface MealHistoryProps {
   history: MealPlanData[];

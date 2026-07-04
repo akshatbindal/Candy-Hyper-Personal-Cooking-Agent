@@ -1,4 +1,3 @@
-import React from "react";
 import { UserPreferences } from "../types";
 import { Settings, Sparkles, Check } from "lucide-react";
 
@@ -29,7 +28,7 @@ export const PreferencesForm: React.FC<PreferencesFormProps> = ({
       ...preferences,
       preferences: {
         ...preferences.preferences,
-        [key]: !preferences.preferences[key] as any,
+        [key]: !preferences.preferences[key],
       },
     };
     onPreferencesChange(updated);

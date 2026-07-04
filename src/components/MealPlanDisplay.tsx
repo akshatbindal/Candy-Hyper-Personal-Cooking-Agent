@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MealDetail, MealPlanData } from "../types";
-import { Clock, Play, Pause, RotateCcw, Flame, Dumbbell, Star, ChevronRight, Check } from "lucide-react";
+import { Clock, Play, Pause, RotateCcw, Flame, Dumbbell, Star, Check } from "lucide-react";
 
 interface MealPlanDisplayProps {
   plan: MealPlanData;
@@ -29,7 +29,7 @@ export const MealPlanDisplay: React.FC<MealPlanDisplayProps> = ({ plan }) => {
 
   // Timer logic
   useEffect(() => {
-    let interval: any = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (timerActive && timerSeconds > 0) {
       interval = setInterval(() => {
         setTimerSeconds((prev) => prev - 1);

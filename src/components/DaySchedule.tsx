@@ -1,6 +1,5 @@
-import React from "react";
 import { CalendarEvent, GmailMessageSnippet } from "../types";
-import { Calendar, Mail, Flame, Clock, PlusCircle } from "lucide-react";
+import { Calendar, Mail, Flame } from "lucide-react";
 
 interface DayScheduleProps {
   events: CalendarEvent[];
